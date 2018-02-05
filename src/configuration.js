@@ -53,7 +53,7 @@ var EasyAutocomplete = (function(scope){
 					enabled: false,
 					caseSensitive: false,
 					method: function(element, phrase) {
-						let phraseSplitted = phrase.split(' ');
+						var phraseSplitted = phrase.split(' ');
 						for( var i = 0; i < phraseSplitted.length; ++i ) {
 						    if (element.indexOf(phraseSplitted[i]) < 0) {
 						        return false
