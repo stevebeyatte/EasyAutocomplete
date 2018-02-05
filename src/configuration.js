@@ -1,5 +1,5 @@
 /*
- * EasyAutocomplete - Configuration 
+ * EasyAutocomplete - Configuration
  */
 var EasyAutocomplete = (function(scope){
 
@@ -53,12 +53,13 @@ var EasyAutocomplete = (function(scope){
 					enabled: false,
 					caseSensitive: false,
 					method: function(element, phrase) {
-
-						if (element.search(phrase) > -1) {
-							return true;
-						} else {
-							return false;
+						let phraseSplitted = phrase.split(' ');
+						for( var i = 0; i < phraseSplitted.length; ++i ) {
+						    if (element.indexOf(phraseSplitted[i]) < 0) {
+						        return false
+						    }
 						}
+						return true;
 					}
 				},
 
@@ -81,7 +82,7 @@ var EasyAutocomplete = (function(scope){
 				onChooseEvent: function() {},
 				onKeyEnterEvent: function() {},
 				onMouseOverEvent: function() {},
-				onMouseOutEvent: function() {},	
+				onMouseOutEvent: function() {},
 				onShowListEvent: function() {},
 				onHideListEvent: function() {}
 			},
@@ -114,7 +115,7 @@ var EasyAutocomplete = (function(scope){
 			}]
 
 		};
-		
+
 		var externalObjects = ["ajaxSettings", "template"];
 
 		this.get = function(propertyName) {
@@ -126,8 +127,8 @@ var EasyAutocomplete = (function(scope){
 				if (defaults[name] === value) {
 					return true;
 				}
-			} 
-			
+			}
+
 			return false;
 		};
 
@@ -159,7 +160,7 @@ var EasyAutocomplete = (function(scope){
 		mergeOptions();
 
 		if (defaults.loggerEnabled === true) {
-			printPropertiesThatDoesntExist(console, options);	
+			printPropertiesThatDoesntExist(console, options);
 		}
 
 		addAjaxSettings();
@@ -174,7 +175,7 @@ var EasyAutocomplete = (function(scope){
 		function prepareDefaults() {
 
 			if (options.dataType === "xml") {
-				
+
 				if (!options.getValue) {
 
 					options.getValue = function(element) {
@@ -182,11 +183,11 @@ var EasyAutocomplete = (function(scope){
 					};
 				}
 
-				
+
 				if (!options.list) {
 
 					options.list = {};
-				} 
+				}
 
 				if (!options.list.sort) {
 					options.list.sort = {};
@@ -196,7 +197,7 @@ var EasyAutocomplete = (function(scope){
 				options.list.sort.method = function(a, b) {
 					a = options.getValue(a);
 					b = options.getValue(b);
-					
+
 					//Alphabeticall sort
 					if (a < b) {
 						return -1;
@@ -227,7 +228,7 @@ var EasyAutocomplete = (function(scope){
 
 				var categories = [];
 
-				for (var i = 0, length = options.categories.length; i < length; i += 1) { 
+				for (var i = 0, length = options.categories.length; i < length; i += 1) {
 
 					var category = options.categories[i];
 
@@ -258,7 +259,7 @@ var EasyAutocomplete = (function(scope){
 				for (var propertyName in source) {
 					if (target[propertyName] !== undefined && target[propertyName] !== null) {
 
-						if (typeof target[propertyName] !== "object" || 
+						if (typeof target[propertyName] !== "object" ||
 								target[propertyName] instanceof Array) {
 							mergedObject[propertyName] = target[propertyName];
 						} else {
@@ -266,7 +267,7 @@ var EasyAutocomplete = (function(scope){
 						}
 					}
 				}
-			
+
 				/* If data is an object */
 				if (target.data !== undefined && target.data !== null && typeof target.data === "object") {
 					mergedObject.data = target.data;
@@ -274,11 +275,11 @@ var EasyAutocomplete = (function(scope){
 
 				return mergedObject;
 			}
-		}	
+		}
 
 
 		function processAfterMerge() {
-			
+
 			if (defaults.url !== "list-required" && typeof defaults.url !== "function") {
 				var defaultUrl = defaults.url;
 				defaults.url = function() {
@@ -303,7 +304,7 @@ var EasyAutocomplete = (function(scope){
 				} else {
 					defaults.listLocation = function(data) {
 						return data[defaultlistLocation];
-					};	
+					};
 				}
 			}
 
@@ -325,9 +326,9 @@ var EasyAutocomplete = (function(scope){
 			if (options.ajaxSettings !== undefined && typeof options.ajaxSettings === "object") {
 				defaults.ajaxSettings = options.ajaxSettings;
 			} else {
-				defaults.ajaxSettings = {};	
+				defaults.ajaxSettings = {};
 			}
-			
+
 		}
 
 		function isAssigned(name) {
@@ -341,19 +342,19 @@ var EasyAutocomplete = (function(scope){
 		//Consol is object that should have method log that prints string
 		//Normally invoke this function with console as consol
 		function printPropertiesThatDoesntExist(consol, optionsToCheck) {
-			
+
 			checkPropertiesIfExist(defaults, optionsToCheck);
 
 			function checkPropertiesIfExist(source, target) {
 				for(var property in target) {
 					if (source[property] === undefined) {
-						consol.log("Property '" + property + "' does not exist in EasyAutocomplete options API.");		
+						consol.log("Property '" + property + "' does not exist in EasyAutocomplete options API.");
 					}
 
 					if (typeof source[property] === "object" && $.inArray(property, externalObjects) === -1) {
 						checkPropertiesIfExist(source[property], target[property]);
 					}
-				}	
+				}
 			}
 		}
 	};
