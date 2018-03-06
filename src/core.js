@@ -126,7 +126,6 @@ var EasyAutocomplete = (function(scope) {
 				$field.attr("placeholder", config.get("placeholder"));
 			}
 
-
 			function createWrapper() {
 				var $wrapper = $("<div>"),
 					classes = consts.getValue("WRAPPER_CSS_CLASS");
@@ -335,9 +334,20 @@ var EasyAutocomplete = (function(scope) {
 				return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
  			}
 
+			var stopWords = config.get('list').match.stopWords;
+			var stopWordsPattern = $.map(stopWords, function(_, word){
+				return '\\b' + word + '\\b';
+			}).join('|');
+			var stopWordsRegex = new RegExp(stopWordsPattern, 'gi');
+
 			function highlightPhrase(string, phrase) {
+				phrase = phrase.replace(stopWordsRegex, ' ');
 				var escapedPhrase = escapeRegExp(phrase);
-				var escapedPhraseRegEx = escapedPhrase.split(' ').join('|');
+				var escapedPhraseRegEx = $.grep($.map(escapedPhrase.split(' '), function(word){
+					return $.trim(word);
+        }), function(word){
+					return !!word;
+				}).join('|');
 				return (string + "").replace(new RegExp("(" + escapedPhraseRegEx + ")", "gi") , "<b>$1</b>");
 			}
 
