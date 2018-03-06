@@ -1,4 +1,12 @@
 /*
+ * easy-autocomplete
+ * jQuery plugin for autocompletion
+ *
+ * @author Łukasz Pawełczak (http://github.com/pawelczak)
+ * @version 1.3.5
+ * Copyright  License:
+ */
+/*
  * EasyAutocomplete - Configuration
  */
 var EasyAutocomplete = (function(scope){
@@ -486,10 +494,10 @@ var EasyAutocomplete = (function(scope){
 
 
 /*
- * EasyAutocomplete - Logger 
+ * EasyAutocomplete - Logger
  */
 var EasyAutocomplete = (function(scope){
-	
+
 	scope.Logger = function Logger() {
 
 		this.error = function(message) {
@@ -504,13 +512,13 @@ var EasyAutocomplete = (function(scope){
 	return scope;
 
 })(EasyAutocomplete || {});
-	
+
 
 /*
  * EasyAutocomplete - Constans
  */
-var EasyAutocomplete = (function(scope){	
-	
+var EasyAutocomplete = (function(scope){
+
 	scope.Constans = function Constans() {
 		var constants = {
 			CONTAINER_CLASS: "easy-autocomplete-container",
@@ -530,9 +538,9 @@ var EasyAutocomplete = (function(scope){
 })(EasyAutocomplete || {});
 
 /*
- * EasyAutocomplete - ListBuilderService 
+ * EasyAutocomplete - ListBuilderService
  *
- * @author Łukasz Pawełczak 
+ * @author Łukasz Pawełczak
  *
  */
 var EasyAutocomplete = (function(scope) {
@@ -548,14 +556,14 @@ var EasyAutocomplete = (function(scope) {
 			builder.getValue = configuration.get("getValue");
 			builder.maxListSize = configuration.get("list").maxNumberOfElements;
 
-				
+
 			listBuilder.push(builder);
 
 			return listBuilder;
 		};
 
 		this.updateCategories = function(listBuilder, data) {
-			
+
 			if (configuration.get("categoriesAssigned")) {
 
 				listBuilder = [];
@@ -567,7 +575,7 @@ var EasyAutocomplete = (function(scope) {
 					listBuilder.push(builder);
 				}
 
-			} 
+			}
 
 			return listBuilder;
 		};
@@ -600,7 +608,7 @@ var EasyAutocomplete = (function(scope) {
 					if (listBuilders[i].data.length > 0) {
 						return true;
 					}
-				} 
+				}
 			}
 
 			return false;
@@ -618,7 +626,7 @@ var EasyAutocomplete = (function(scope) {
 
 				builder = convertDataToListBuilder();
 			}
-			
+
 
 			if (category.header !== undefined) {
 				builder.header = category.header;
@@ -645,9 +653,9 @@ var EasyAutocomplete = (function(scope) {
 				}
 
 			} else {
-				builder.getValue = configuration.get("getValue");	
+				builder.getValue = configuration.get("getValue");
 			}
-			
+
 
 			return builder;
 
@@ -730,7 +738,7 @@ var EasyAutocomplete = (function(scope) {
  * EasyAutocomplete - Data proccess module
  *
  * Process list to display:
- * - sort 
+ * - sort
  * - decrease number to specific number
  * - show only matching list
  *
@@ -760,11 +768,11 @@ var EasyAutocomplete = (function(scope) {
 				for(var i = 0, length = list.length; i < length; i += 1) {
 
 					value = config.get("getValue")(list[i]);
-					
+
 					if (match(value, phrase)) {
-						preparedList.push(list[i]);	
+						preparedList.push(list[i]);
 					}
-					
+
 				}
 
 			} else {
@@ -779,9 +787,9 @@ var EasyAutocomplete = (function(scope) {
 			if (!config.get("list").match.caseSensitive) {
 
 				if (typeof value === "string") {
-					value = value.toLowerCase();	
+					value = value.toLowerCase();
 				}
-				
+
 				phrase = phrase.toLowerCase();
 			}
 			if (config.get("list").match.method(value, phrase)) {
@@ -806,7 +814,7 @@ var EasyAutocomplete = (function(scope) {
 
 			return list;
 		}
-		
+
 	};
 
 
@@ -817,9 +825,9 @@ var EasyAutocomplete = (function(scope) {
 
 
 /*
- * EasyAutocomplete - Template 
+ * EasyAutocomplete - Template
  *
- * 
+ *
  *
  */
 var EasyAutocomplete = (function(scope){
@@ -891,16 +899,16 @@ var EasyAutocomplete = (function(scope){
 
 			if (template.type === "description") {
 
-				buildMethod = genericTemplates.description.method; 
+				buildMethod = genericTemplates.description.method;
 
 				if (typeof _fields.description === "string") {
 					buildMethod = function(elementValue, element) {
 						return elementValue + " - <span>" + element[_fields.description] + "</span>";
-					};					
+					};
 				} else if (typeof _fields.description === "function") {
 					buildMethod = function(elementValue, element) {
 						return elementValue + " - <span>" + _fields.description(element) + "</span>";
-					};	
+					};
 				}
 
 				return buildMethod;
@@ -911,7 +919,7 @@ var EasyAutocomplete = (function(scope){
 				if (typeof _fields.iconSrc === "string") {
 					buildMethod = function(elementValue, element) {
 						return elementValue + "<img class='eac-icon' src='" + element[_fields.iconSrc] + "' />" ;
-					};					
+					};
 				} else if (typeof _fields.iconSrc === "function") {
 					buildMethod = function(elementValue, element) {
 						return elementValue + "<img class='eac-icon' src='" + _fields.iconSrc(element) + "' />" ;
@@ -927,7 +935,7 @@ var EasyAutocomplete = (function(scope){
 				if (typeof _fields.iconSrc === "string") {
 					buildMethod = function(elementValue, element) {
 						return "<img class='eac-icon' src='" + element[_fields.iconSrc] + "' />" + elementValue;
-					};					
+					};
 				} else if (typeof _fields.iconSrc === "function") {
 					buildMethod = function(elementValue, element) {
 						return "<img class='eac-icon' src='" + _fields.iconSrc(element) + "' />" + elementValue;
@@ -942,7 +950,7 @@ var EasyAutocomplete = (function(scope){
 				if (typeof _fields.link === "string") {
 					buildMethod = function(elementValue, element) {
 						return "<a href='" + element[_fields.link] + "' >" + elementValue + "</a>";
-					};					
+					};
 				} else if (typeof _fields.link === "function") {
 					buildMethod = function(elementValue, element) {
 						return "<a href='" + _fields.link(element) + "' >" + elementValue + "</a>";
@@ -988,7 +996,7 @@ var EasyAutocomplete = (function(scope){
 			}
 
 			if (options.type && genericTemplates[options.type]) {
-				return (function () { 
+				return (function () {
 					var _cssClass = genericTemplates[options.type].cssClass;
 					return function() { return _cssClass;};
 				})();
