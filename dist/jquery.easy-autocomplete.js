@@ -1,16 +1,149 @@
 /*
  * easy-autocomplete
  * jQuery plugin for autocompletion
- * 
+ *
  * @author Łukasz Pawełczak (http://github.com/pawelczak)
  * @version 1.3.5
- * Copyright  License: 
+ * Copyright  License:
  */
-
 /*
  * EasyAutocomplete - Configuration
  */
 var EasyAutocomplete = (function(scope){
+	var DEFAULT_STOP_WORDS = {
+		a: true,
+		all: true,
+		also: true,
+		am: true,
+		an: true,
+		and: true,
+		any: true,
+		are: true,
+		as: true,
+		at: true,
+		be: true,
+		been: true,
+		but: true,
+		by: true,
+		can: true,
+		cannot: true,
+		cant: true,
+		co: true,
+		con: true,
+		could: true,
+		couldnt: true,
+		de: true,
+		do: true,
+		done: true,
+		each: true,
+		eg: true,
+		else: true,
+		etc: true,
+		even: true,
+		ever: true,
+		every: true,
+		few: true,
+		for: true,
+		from: true,
+		get: true,
+		go: true,
+		had: true,
+		has: true,
+		hasnt: true,
+		have: true,
+		he: true,
+		her: true,
+		here: true,
+		hers: true,
+		him: true,
+		his: true,
+		how: true,
+		i: true,
+		ie: true,
+		if: true,
+		in: true,
+		inc: true,
+		is: true,
+		it: true,
+		its: true,
+		may: true,
+		me: true,
+		might: true,
+		mine: true,
+		most: true,
+		much: true,
+		must: true,
+		my: true,
+		no: true,
+		none: true,
+		nor: true,
+		not: true,
+		of: true,
+		off: true,
+		on: true,
+		onto: true,
+		or: true,
+		our: true,
+		ours: true,
+		several: true,
+		she: true,
+		so: true,
+		some: true,
+		such: true,
+		than: true,
+		that: true,
+		the: true,
+		their: true,
+		them: true,
+		themselves: true,
+		then: true,
+		thence: true,
+		there: true,
+		thereafter: true,
+		thereby: true,
+		therefore: true,
+		therein: true,
+		thereupon: true,
+		these: true,
+		they: true,
+		this: true,
+		those: true,
+		though: true,
+		thus: true,
+		to: true,
+		too: true,
+		us: true,
+		was: true,
+		we: true,
+		were: true,
+		what: true,
+		when: true,
+		whence: true,
+		whenever: true,
+		where: true,
+		whereafter: true,
+		whereas: true,
+		whereby: true,
+		wherein: true,
+		whereupon: true,
+		wherever: true,
+		whether: true,
+		which: true,
+		who: true,
+		whoever: true,
+		whom: true,
+		whose: true,
+		why: true,
+		will: true,
+		with: true,
+		within: true,
+		without: true,
+		would: true,
+		yet: true,
+		you: true,
+		your: true,
+		yours: true
+	};
 
 	scope.Configuration = function Configuration(options) {
 		var defaults = {
@@ -59,14 +192,22 @@ var EasyAutocomplete = (function(scope){
 				match: {
 					enabled: false,
 					caseSensitive: false,
+					stopWords: DEFAULT_STOP_WORDS,
 					method: function(element, phrase) {
-						let phraseSplitted = phrase.split(' ');
+						var phraseSplitted = phrase.split(' ');
+						var anyMatched = false;
+						var stopWords = defaults.list.match.stopWords;
 						for( var i = 0; i < phraseSplitted.length; ++i ) {
-						    if (element.indexOf(phraseSplitted[i]) < 0) {
+						    var word = phraseSplitted[i];
+						    if (stopWords[word.toLowerCase()]) {
+						    	  continue;
+								}
+						    if (element.indexOf(word) < 0) {
 						        return false
-						    }
+								}
+								anyMatched = true;
 						}
-						return true;
+						return anyMatched;
 					}
 				},
 
@@ -353,10 +494,10 @@ var EasyAutocomplete = (function(scope){
 
 
 /*
- * EasyAutocomplete - Logger 
+ * EasyAutocomplete - Logger
  */
 var EasyAutocomplete = (function(scope){
-	
+
 	scope.Logger = function Logger() {
 
 		this.error = function(message) {
@@ -371,13 +512,13 @@ var EasyAutocomplete = (function(scope){
 	return scope;
 
 })(EasyAutocomplete || {});
-	
+
 
 /*
  * EasyAutocomplete - Constans
  */
-var EasyAutocomplete = (function(scope){	
-	
+var EasyAutocomplete = (function(scope){
+
 	scope.Constans = function Constans() {
 		var constants = {
 			CONTAINER_CLASS: "easy-autocomplete-container",
@@ -397,9 +538,9 @@ var EasyAutocomplete = (function(scope){
 })(EasyAutocomplete || {});
 
 /*
- * EasyAutocomplete - ListBuilderService 
+ * EasyAutocomplete - ListBuilderService
  *
- * @author Łukasz Pawełczak 
+ * @author Łukasz Pawełczak
  *
  */
 var EasyAutocomplete = (function(scope) {
@@ -415,14 +556,14 @@ var EasyAutocomplete = (function(scope) {
 			builder.getValue = configuration.get("getValue");
 			builder.maxListSize = configuration.get("list").maxNumberOfElements;
 
-				
+
 			listBuilder.push(builder);
 
 			return listBuilder;
 		};
 
 		this.updateCategories = function(listBuilder, data) {
-			
+
 			if (configuration.get("categoriesAssigned")) {
 
 				listBuilder = [];
@@ -434,7 +575,7 @@ var EasyAutocomplete = (function(scope) {
 					listBuilder.push(builder);
 				}
 
-			} 
+			}
 
 			return listBuilder;
 		};
@@ -467,7 +608,7 @@ var EasyAutocomplete = (function(scope) {
 					if (listBuilders[i].data.length > 0) {
 						return true;
 					}
-				} 
+				}
 			}
 
 			return false;
@@ -485,7 +626,7 @@ var EasyAutocomplete = (function(scope) {
 
 				builder = convertDataToListBuilder();
 			}
-			
+
 
 			if (category.header !== undefined) {
 				builder.header = category.header;
@@ -512,9 +653,9 @@ var EasyAutocomplete = (function(scope) {
 				}
 
 			} else {
-				builder.getValue = configuration.get("getValue");	
+				builder.getValue = configuration.get("getValue");
 			}
-			
+
 
 			return builder;
 
@@ -597,7 +738,7 @@ var EasyAutocomplete = (function(scope) {
  * EasyAutocomplete - Data proccess module
  *
  * Process list to display:
- * - sort 
+ * - sort
  * - decrease number to specific number
  * - show only matching list
  *
@@ -627,11 +768,11 @@ var EasyAutocomplete = (function(scope) {
 				for(var i = 0, length = list.length; i < length; i += 1) {
 
 					value = config.get("getValue")(list[i]);
-					
+
 					if (match(value, phrase)) {
-						preparedList.push(list[i]);	
+						preparedList.push(list[i]);
 					}
-					
+
 				}
 
 			} else {
@@ -646,9 +787,9 @@ var EasyAutocomplete = (function(scope) {
 			if (!config.get("list").match.caseSensitive) {
 
 				if (typeof value === "string") {
-					value = value.toLowerCase();	
+					value = value.toLowerCase();
 				}
-				
+
 				phrase = phrase.toLowerCase();
 			}
 			if (config.get("list").match.method(value, phrase)) {
@@ -673,7 +814,7 @@ var EasyAutocomplete = (function(scope) {
 
 			return list;
 		}
-		
+
 	};
 
 
@@ -684,9 +825,9 @@ var EasyAutocomplete = (function(scope) {
 
 
 /*
- * EasyAutocomplete - Template 
+ * EasyAutocomplete - Template
  *
- * 
+ *
  *
  */
 var EasyAutocomplete = (function(scope){
@@ -758,16 +899,16 @@ var EasyAutocomplete = (function(scope){
 
 			if (template.type === "description") {
 
-				buildMethod = genericTemplates.description.method; 
+				buildMethod = genericTemplates.description.method;
 
 				if (typeof _fields.description === "string") {
 					buildMethod = function(elementValue, element) {
 						return elementValue + " - <span>" + element[_fields.description] + "</span>";
-					};					
+					};
 				} else if (typeof _fields.description === "function") {
 					buildMethod = function(elementValue, element) {
 						return elementValue + " - <span>" + _fields.description(element) + "</span>";
-					};	
+					};
 				}
 
 				return buildMethod;
@@ -778,7 +919,7 @@ var EasyAutocomplete = (function(scope){
 				if (typeof _fields.iconSrc === "string") {
 					buildMethod = function(elementValue, element) {
 						return elementValue + "<img class='eac-icon' src='" + element[_fields.iconSrc] + "' />" ;
-					};					
+					};
 				} else if (typeof _fields.iconSrc === "function") {
 					buildMethod = function(elementValue, element) {
 						return elementValue + "<img class='eac-icon' src='" + _fields.iconSrc(element) + "' />" ;
@@ -794,7 +935,7 @@ var EasyAutocomplete = (function(scope){
 				if (typeof _fields.iconSrc === "string") {
 					buildMethod = function(elementValue, element) {
 						return "<img class='eac-icon' src='" + element[_fields.iconSrc] + "' />" + elementValue;
-					};					
+					};
 				} else if (typeof _fields.iconSrc === "function") {
 					buildMethod = function(elementValue, element) {
 						return "<img class='eac-icon' src='" + _fields.iconSrc(element) + "' />" + elementValue;
@@ -809,7 +950,7 @@ var EasyAutocomplete = (function(scope){
 				if (typeof _fields.link === "string") {
 					buildMethod = function(elementValue, element) {
 						return "<a href='" + element[_fields.link] + "' >" + elementValue + "</a>";
-					};					
+					};
 				} else if (typeof _fields.link === "function") {
 					buildMethod = function(elementValue, element) {
 						return "<a href='" + _fields.link(element) + "' >" + elementValue + "</a>";
@@ -855,7 +996,7 @@ var EasyAutocomplete = (function(scope){
 			}
 
 			if (options.type && genericTemplates[options.type]) {
-				return (function () { 
+				return (function () {
 					var _cssClass = genericTemplates[options.type].cssClass;
 					return function() { return _cssClass;};
 				})();
@@ -983,7 +1124,6 @@ var EasyAutocomplete = (function(scope) {
 			if (config.get("placeholder")) {
 				$field.attr("placeholder", config.get("placeholder"));
 			}
-
 
 			function createWrapper() {
 				var $wrapper = $("<div>"),
@@ -1187,9 +1327,20 @@ var EasyAutocomplete = (function(scope) {
 				return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
  			}
 
+			var stopWords = config.get('list').match.stopWords;
+			var stopWordsPattern = $.map(stopWords, function(_, word){
+				return '\\b' + word + '\\b';
+			}).join('|');
+			var stopWordsRegex = new RegExp(stopWordsPattern, 'gi');
+
 			function highlightPhrase(string, phrase) {
+				phrase = phrase.replace(stopWordsRegex, ' ');
 				var escapedPhrase = escapeRegExp(phrase);
-				var escapedPhraseRegEx = escapedPhrase.split(' ').join('|');
+				var escapedPhraseRegEx = $.grep($.map(escapedPhrase.split(' '), function(word){
+					return $.trim(word);
+        }), function(word){
+					return !!word;
+				}).join('|');
 				return (string + "").replace(new RegExp("(" + escapedPhraseRegEx + ")", "gi") , "<b>$1</b>");
 			}
 

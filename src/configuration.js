@@ -2,6 +2,141 @@
  * EasyAutocomplete - Configuration
  */
 var EasyAutocomplete = (function(scope){
+	// Small words to exclude from fuzzy matching.
+	var DEFAULT_STOP_WORDS = {
+		a: true,
+		all: true,
+		also: true,
+		am: true,
+		an: true,
+		and: true,
+		any: true,
+		are: true,
+		as: true,
+		at: true,
+		be: true,
+		been: true,
+		but: true,
+		by: true,
+		can: true,
+		cannot: true,
+		cant: true,
+		co: true,
+		con: true,
+		could: true,
+		couldnt: true,
+		de: true,
+		do: true,
+		done: true,
+		each: true,
+		eg: true,
+		else: true,
+		etc: true,
+		even: true,
+		ever: true,
+		every: true,
+		few: true,
+		for: true,
+		from: true,
+		get: true,
+		go: true,
+		had: true,
+		has: true,
+		hasnt: true,
+		have: true,
+		he: true,
+		her: true,
+		here: true,
+		hers: true,
+		him: true,
+		his: true,
+		how: true,
+		i: true,
+		ie: true,
+		if: true,
+		in: true,
+		inc: true,
+		is: true,
+		it: true,
+		its: true,
+		may: true,
+		me: true,
+		might: true,
+		mine: true,
+		most: true,
+		much: true,
+		must: true,
+		my: true,
+		no: true,
+		none: true,
+		nor: true,
+		not: true,
+		of: true,
+		off: true,
+		on: true,
+		onto: true,
+		or: true,
+		our: true,
+		ours: true,
+		several: true,
+		she: true,
+		so: true,
+		some: true,
+		such: true,
+		than: true,
+		that: true,
+		the: true,
+		their: true,
+		them: true,
+		themselves: true,
+		then: true,
+		thence: true,
+		there: true,
+		thereafter: true,
+		thereby: true,
+		therefore: true,
+		therein: true,
+		thereupon: true,
+		these: true,
+		they: true,
+		this: true,
+		those: true,
+		though: true,
+		thus: true,
+		to: true,
+		too: true,
+		us: true,
+		was: true,
+		we: true,
+		were: true,
+		what: true,
+		when: true,
+		whence: true,
+		whenever: true,
+		where: true,
+		whereafter: true,
+		whereas: true,
+		whereby: true,
+		wherein: true,
+		whereupon: true,
+		wherever: true,
+		whether: true,
+		which: true,
+		who: true,
+		whoever: true,
+		whom: true,
+		whose: true,
+		why: true,
+		will: true,
+		with: true,
+		within: true,
+		without: true,
+		would: true,
+		yet: true,
+		you: true,
+		your: true,
+		yours: true
+	};
 
 	scope.Configuration = function Configuration(options) {
 		var defaults = {
@@ -52,14 +187,24 @@ var EasyAutocomplete = (function(scope){
 				match: {
 					enabled: false,
 					caseSensitive: false,
+					stopWords: DEFAULT_STOP_WORDS,
 					method: function(element, phrase) {
 						var phraseSplitted = phrase.split(' ');
+						var anyMatched = false;
+						var stopWords = defaults.list.match.stopWords;
 						for( var i = 0; i < phraseSplitted.length; ++i ) {
-						    if (element.indexOf(phraseSplitted[i]) < 0) {
+						    var word = phraseSplitted[i];
+						    if (stopWords[word.toLowerCase()]) {
+						    	  continue;
+								}
+						    if (element.indexOf(word) < 0) {
+										// Explicit non-match.
 						        return false
-						    }
+								}
+								anyMatched = true;
 						}
-						return true;
+						// We'll only return true if there were any non-stop-word matches.
+						return anyMatched;
 					}
 				},
 
